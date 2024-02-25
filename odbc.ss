@@ -213,8 +213,9 @@
   ;; Gets all diagnostic records for a handle.
   ;; @param handle-type symbol
   ;; @param handle integer
-  ;; @returns list
+  ;; @returns list | boolean
   ;; A list of association lists.
+  ;; #f if there are no diagnostic records.
   ;; @see get-diagnostic-record
   (define (get-diagnostic-records handle-type handle)
     (letrec ((f (lambda (handle-type handle rec-number accumulator)
@@ -223,5 +224,5 @@
                          (accumulator (cons diagnostic-record accumulator)))
                     (guard (c ((error? c) (reverse accumulator)))
                       (f handle-type handle rec-number accumulator))))))
-      (guard (condition ((error? condition) #f))
+      (guard (c ((error? c) #f))
         (f handle-type handle 1 '())))))
